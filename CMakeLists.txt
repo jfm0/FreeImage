@@ -554,12 +554,10 @@ include_directories(Source/LibJXR/common/include)
 include_directories(Source/LibJXR/jxrgluelib)
 include_directories(Wrapper/FreeImagePlus)
 
-
-
-configure_file (
-  source/config.h.in
-  ${PROJECT_SOURCE_DIR}/Source/config.h
-)
+# configure_file (
+  # source/config.h.in
+  # ${PROJECT_SOURCE_DIR}/Source/config.h
+# )
 
 add_definitions(-DOPJ_STATIC -DNO_WINDOWS -DNDEBUG -DNO_LCMS -DDISABLE_PERF_MEASUREMENT -DLIBRAW_NODLL -DLIBRAW_LIBRARY_BUILD)
 
@@ -576,7 +574,6 @@ endif()
 
 install(TARGETS FreeImage DESTINATION lib)
 install(FILES Source/FreeImage.h DESTINATION include/FreeImage)
-install(FILES Source/config.h DESTINATION include/FreeImage)
 install(FILES Wrapper/FreeImagePlus/FreeImagePlus.h DESTINATION include/FreeImage)
 
 
