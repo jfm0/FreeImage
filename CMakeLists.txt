@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.11)
 
 project(FreeImage)
 
-option(FREEIMAGE_LIB    "Use Static Libaray" ON)
+option(FREEIMAGE_LIB    "Use Static Libaray" OFF)
 option(SUPPORT_FMT_WEBP "use lib webp" ON)
 option(SUPPORT_FMT_JPEG "use lib jpeg" ON)
 option(SUPPORT_FMT_OPENEXR "use lib openexr" ON)
@@ -387,7 +387,24 @@ set(LIB_JXR_SRC
 
 
 file(GLOB LIB_OTHER_SRC 
-    Source/LibPNG/*.c
+    Source/LibPNG/example.c
+    Source/LibPNG/png.c
+    Source/LibPNG/pngerror.c
+    Source/LibPNG/pngget.c
+    Source/LibPNG/pngmem.c
+    Source/LibPNG/pngpread.c
+    Source/LibPNG/pngread.c
+    Source/LibPNG/pngrio.c
+    Source/LibPNG/pngrtran.c
+    Source/LibPNG/pngrutil.c
+    Source/LibPNG/pngset.c
+    #Source/LibPNG/pngtest.c
+    Source/LibPNG/pngtrans.c
+    Source/LibPNG/pngwio.c
+    Source/LibPNG/pngwrite.c
+    Source/LibPNG/pngwtran.c
+    Source/LibPNG/pngwutil.c
+
     Source/ZLib/*.c
 )
 
@@ -468,7 +485,7 @@ file(GLOB LIB_FREEIMAGE_SRC
 
     Source/FreeImageToolkit/*.cpp
     Source/Metadata/*.cpp  
-    Wrapper/FreeImagePlus/src/*.cpp
+    #Wrapper/FreeImagePlus/src/*.cpp
 )
 
 
@@ -559,18 +576,24 @@ include_directories(Wrapper/FreeImagePlus)
   # ${PROJECT_SOURCE_DIR}/Source/config.h
 # )
 
-add_definitions(-DOPJ_STATIC -DNO_WINDOWS -DNDEBUG -DNO_LCMS -DDISABLE_PERF_MEASUREMENT -DLIBRAW_NODLL -DLIBRAW_LIBRARY_BUILD)
-
 IF(MSVC)
-  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_WINDOWS)
+else()
+  add_definitions(-DNO_WINDOWS)
 ENDIF()
 
+#Common definitions
+add_definitions(-DLIBRAW_LIBRARY_BUILD -DOPJ_STATIC -DNDEBUG -DDISABLE_PERF_MEASUREMENT)
+
 if (${FREEIMAGE_LIB})
+    # static
     add_library(FreeImage STATIC ${ALL_SRC})
+    add_definitions(-DNO_LCMS -DLIBRAW_NODLL)
 else()
+    # shared/dll
+    add_definitions(-DFREEIMAGE_EXPORTS -DFIP_EXPORTS -DOPJ_EXPORTS -DLIBRAW_BUILDLIB)
     add_library(FreeImage SHARED ${ALL_SRC})
 endif()
-
 
 install(TARGETS FreeImage DESTINATION lib)
 install(FILES Source/FreeImage.h DESTINATION include/FreeImage)
