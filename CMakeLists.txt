@@ -595,8 +595,7 @@ else()
     add_library(FreeImage SHARED ${ALL_SRC})
 endif()
 
-install(TARGETS FreeImage DESTINATION lib)
-install(FILES Source/FreeImage.h DESTINATION include/FreeImage)
-install(FILES Wrapper/FreeImagePlus/FreeImagePlus.h DESTINATION include/FreeImage)
-
-
+include(GNUInstallDirs)
+install(TARGETS FreeImage DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(FILES Source/FreeImage.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES Wrapper/FreeImagePlus/FreeImagePlus.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
